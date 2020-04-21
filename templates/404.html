@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MBTA Finder</title>
+</head>
+<body>
+  <h1>The nearest {{length}} station{{'s' if length > 0 else ''}}:</h1>
+  <section>
+    {%for i in range(0, length)%}
+      {% set result = results[i] %}
+      <h2>{{result['name']}}</h2>
+      <i>vicinity: {{i+1}}</i>
+      <p>{{result['address']}}</p>
+      <p>{{result['at_street']}}, {{result['municipality']}}</p>
+      <p>Latitude, Longitude on Map:
+        <a href="https://www.google.com/maps/place/({{result['latitude']}}, {{result['longitude']}})">({{result['latitude']}}, {{result['longitude']}})</a>
+      </p>
+      <p>
+        {{'Wheelchair Accessible' if result['wheelchair_boarding'] else 'No wheelchair'}}
+        {% if result['wheelchair_boarding'] %}
+          <img width="70px" src="{{ url_for('static', filename='ADA-107-2.jpg') }}" />
+        {% endif %}
+      </p>
+      <hr />
+    {%endfor%}
+  </section>
+</body>
+</html>

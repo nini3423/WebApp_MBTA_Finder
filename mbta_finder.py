@@ -8,8 +8,8 @@ MAPQUEST_BASE_URL = "http://www.mapquestapi.com/geocoding/v1/address"
 MBTA_BASE_URL = "https://api-v3.mbta.com/stops"
 
 # Your API KEYS (you need to use your own keys - very long random characters)
-MAPQUEST_API_KEY = ""
-MBTA_API_KEY = ""
+MAPQUEST_API_KEY = "AlviMCriWyGQwXZOvPj4FQLwVZxyfGkm"
+MBTA_API_KEY = "6815c02c88074882aaa78267fcb52b83"
 
 
 # A little bit of scaffolding if you want to use it
@@ -19,9 +19,10 @@ def get_json(url):
     a Python JSON object containing the response to that request.
     We did similar thing in the previous assignment.
     """
-
-    response_data = ...
-    return response_data
+    req = urllib.request.Request(url)
+    response = urllib.request.urlopen(req)
+    response_data = response.read()
+    return json.loads(response_data)
 
 
 def get_lat_long(place_name):
@@ -36,8 +37,8 @@ def get_lat_long(place_name):
     # print(url) # uncomment to test the url in browser
     place_json = get_json(url)
     # pprint(place_json)
-    lat = place_json[...][...] # modify this so you get the correct latitude
-    lon = place_json[...][...] # modify this so you get the correct longitude
+    lat = place_json["results"][0]["locations"][0]['displayLatLng']['lat'] # modify this so you get the correct latitude
+    lon = place_json["results"][0]["locations"][0]['displayLatLng']['lng'] # modify this so you get the correct longitude
 
     return lat, lon
 
@@ -54,11 +55,11 @@ def get_nearest_station(latitude, longitude):
     # print(url) # uncomment to test the url in browser
     station_json = get_json(url)
     # pprint(station_json) # uncomment to see the json data
-    station_name = station_json[...][...] # modify this so you get the correct station name
+    station_name = station_json["data"][0]['attributes']['name'] # modify this so you get the correct station name
     # print(station_name) # uncomment to check it
 
     # try to find out where the wheelchair_boarding information is
-    wheelchair_boarding = ...
+    wheelchair_boarding = station_json["data"][0]['attributes']['wheelchair_boarding']
 
     return station_name, wheelchair_boarding
 
